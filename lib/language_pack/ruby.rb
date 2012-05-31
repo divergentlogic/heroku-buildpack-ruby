@@ -12,6 +12,8 @@ class LanguagePack::Ruby < LanguagePack::Base
   NODE_VERSION        = "0.4.7"
   NODE_JS_BINARY_PATH = "node-#{NODE_VERSION}"
 
+  ZIP_UNZIP_BINARY_PATH = "zip-unzip"
+
   # detects if this is a valid Ruby app
   # @return [Boolean] true if it's a Ruby app
   def self.use?
@@ -257,9 +259,14 @@ ERROR
     add_node_js_binary
   end
 
+  def dl_binaries
+    [ZIP_UNZIP_BINARY_PATH]
+  end
+
   # vendors binaries into the slug
   def install_binaries
     binaries.each {|binary| install_binary(binary) }
+    dl_binaries.each {|binary| install_dl_binary(binary) }
     Dir["bin/*"].each {|path| run("chmod +x #{path}") }
   end
 
@@ -271,6 +278,14 @@ ERROR
     FileUtils.mkdir_p bin_dir
     Dir.chdir(bin_dir) do |dir|
       run("curl #{VENDOR_URL}/#{name}.tgz -s -o - | tar xzf -")
+    end
+  end
+
+  def install_dl_binary(name)
+    bin_dir = "bin"
+    FileUtils.mkdir_p bin_dir
+    Dir.chdir(bin_dir) do |dir|
+      run("curl #{DL_URL}/#{name}.tgz -s -o - | tar xzf -")
     end
   end
 
