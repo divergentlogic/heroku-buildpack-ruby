@@ -13,6 +13,8 @@ class LanguagePack::Ruby < LanguagePack::Base
   NODE_JS_BINARY_PATH = "node-#{NODE_VERSION}"
   JVM_BASE_URL        = "http://heroku-jvm-langpack-java.s3.amazonaws.com"
   JVM_VERSION         = "openjdk6-latest"
+  EXIFTOOL_VERSION     = "8.95"
+  EXIFTOOL_BINARY_PATH = "exiftool-#{EXIFTOOL_VERSION}"
 
   # detects if this is a valid Ruby app
   # @return [Boolean] true if it's a Ruby app
@@ -304,9 +306,16 @@ ERROR
     add_node_js_binary
   end
 
+  def chrisdurtschi_binaries
+    [EXIFTOOL_BINARY_PATH]
+  end
+
   # vendors binaries into the slug
   def install_binaries
     binaries.each {|binary| install_binary(binary) }
+    Dir["bin/*"].each {|path| run("chmod +x #{path}") }
+
+    chrisdurtschi_binaries.each {|binary| install_chrisdurtschi_binary(binary) }
     Dir["bin/*"].each {|path| run("chmod +x #{path}") }
   end
 
@@ -318,6 +327,14 @@ ERROR
     FileUtils.mkdir_p bin_dir
     Dir.chdir(bin_dir) do |dir|
       run("curl #{VENDOR_URL}/#{name}.tgz -s -o - | tar xzf -")
+    end
+  end
+
+  def install_chrisdurtschi_binary(name)
+    bin_dir = "bin"
+    FileUtils.mkdir_p bin_dir
+    Dir.chdir(bin_dir) do |dir|
+      run("curl #{CHRISDURTSCHI_URL}/#{name}.tgz -s -o - | tar xzf -")
     end
   end
 
