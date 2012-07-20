@@ -1,8 +1,45 @@
-## v24
+## v29 (7/18/2012)
+
+Features:
+
+* Upgrade to Bundler 1.2.0.rc
+
+## v28 (7/16/2012)
+
+Features:
+
+* Vendor OpenJDK6 into slug when using JRuby
+* ruby version support for ruby 1.8.7 via bundler's ruby DSL
+
+Bugfixes:
+
+* sqlite3 error gets displayed again
+
+## v27 (6/14/2012)
+
+Bugfixes:
+
+* Remove `vendor/bundle` message only appears when dir actually exists
+
+## v26 (6/14/2012)
+
+Features:
+
+* print message when assets:precompile finishes successfully
+* Remove `vendor/bundle` if user commits it to their git repo.
+
+## v25 (6/12/2012)
+
+Features:
+
+* support "ruby-xxx-jruby-yyy" for jruby detection packages
+
+## v24 (6/7/2012)
 
 Features:
 
 * removes bundler cache in the slug, to minimize slug size (@stevenh512, #16)
+* optimize push time with caching
 
 ## v23 (5/8/2012)
 
